@@ -1,539 +1,264 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
+  <title>Implementing TURN server on CentOS</title>
+  <style>
+    body {
+      background-color: #222222;
+      color: #ddd;
+      font-family: 'Yanone Kaffeesatz', sans-serif;
+      font-size: 30px;
+      padding: 40px;
+      padding-bottom: 0;
+    }
 
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="">
-	<meta name="author" content="">
+    strong {
+      color: #cb2027;
+    }
 
-	<title>dphans.github.io</title>
+    h1 {
+      font-size: 60px;
+      margin-bottom: 1.5em;
+      text-align: center;
+    }
 
-	<!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
-	<link href="css/bootstrap.min.css" rel="stylesheet">
+    h2 {
+      font-weight: normal;
+    }
 
-	<!-- Custom CSS -->
-	<link href="css/freelancer.css" rel="stylesheet">
+    .hero {
+      font-size: 40px;
+      margin-bottom: 1.5em;
+      text-align: center;
+      /*color: #cb2027;*/
+    }
 
-	<!-- Custom Fonts -->
-	<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-	<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-	<link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    .intro {
+      text-align: center;
+    }
 
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-		<![endif]-->
+    .func {
+      color: #9ae2e4;
+    }
 
-	</head>
+    .name {
+      color: gold;
+    }
 
-	<body id="page-top" class="index">
+    .classes {
+      color: #9c9ae4;
+    }
 
-		<!-- Navigation -->
-		<nav class="navbar navbar-default navbar-fixed-top">
-			<div class="container">
-				<!-- Brand and toggle get grouped for better mobile display -->
-				<div class="navbar-header page-scroll">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#page-top">DPHANS.GITHUB.IO</a>
-				</div>
+    .disclaimer {
+      line-height: 2em;
+    }
 
-				<!-- Collect the nav links, forms, and other content for toggling -->
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<ul class="nav navbar-nav navbar-right">
-						<li class="hidden">
-							<a href="#page-top"></a>
-						</li>
-						<li class="page-scroll">
-							<a href="#portfolio">Portfolio</a>
-						</li>
-						<li class="page-scroll">
-							<a href="#about">About</a>
-						</li>
-						<li class="page-scroll">
-							<a href="#contact">Contact</a>
-						</li>
-					</ul>
-				</div>
-				<!-- /.navbar-collapse -->
-			</div>
-			<!-- /.container-fluid -->
-		</nav>
+    code {
+      display: block;
+      font-family: 'Inconsolata', Monaco, Menlo;
+      font-size: 25px;
+      margin-bottom: 3em;
+      margin-left: 40px;
+      margin-top: 1.5em;
+    }
 
-		<!-- Header -->
-		<header>
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12">
-						<img class="img-responsive" src="img/profile.png" alt="">
-						<div class="intro-text">
-							<span class="name">@baophan94</span>
-							<hr class="star-light">
-							<span class="skills">Mobile Developer - User Experience Designer</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</header>
+    footer {
+      font-size: 12px;
+      margin-top: 200px;
+      opacity: 0.4;
+      text-align: right;
+    }
 
-		<!-- Portfolio Grid Section -->
-		<section id="portfolio">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12 text-center">
-						<h2>Portfolio</h2>
-						<hr class="star-primary">
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 portfolio-item">
-						<a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-							<div class="caption">
-								<div class="caption-content">
-									<i class="fa fa-search-plus fa-3x"></i>
-								</div>
-							</div>
-							<img src="img/portfolio/cabin.png" class="img-responsive" alt="">
-						</a>
-					</div>
-					<div class="col-sm-4 portfolio-item">
-						<a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
-							<div class="caption">
-								<div class="caption-content">
-									<i class="fa fa-search-plus fa-3x"></i>
-								</div>
-							</div>
-							<img src="img/portfolio/cake.png" class="img-responsive" alt="">
-						</a>
-					</div>
-					<div class="col-sm-4 portfolio-item">
-						<a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
-							<div class="caption">
-								<div class="caption-content">
-									<i class="fa fa-search-plus fa-3x"></i>
-								</div>
-							</div>
-							<img src="img/portfolio/circus.png" class="img-responsive" alt="">
-						</a>
-					</div>
-					<div class="col-sm-4 portfolio-item">
-						<a href="#portfolioModal4" class="portfolio-link" data-toggle="modal">
-							<div class="caption">
-								<div class="caption-content">
-									<i class="fa fa-search-plus fa-3x"></i>
-								</div>
-							</div>
-							<img src="img/portfolio/game.png" class="img-responsive" alt="">
-						</a>
-					</div>
-					<div class="col-sm-4 portfolio-item">
-						<a href="#portfolioModal5" class="portfolio-link" data-toggle="modal">
-							<div class="caption">
-								<div class="caption-content">
-									<i class="fa fa-search-plus fa-3x"></i>
-								</div>
-							</div>
-							<img src="img/portfolio/safe.png" class="img-responsive" alt="">
-						</a>
-					</div>
-					<div class="col-sm-4 portfolio-item">
-						<a href="#portfolioModal6" class="portfolio-link" data-toggle="modal">
-							<div class="caption">
-								<div class="caption-content">
-									<i class="fa fa-search-plus fa-3x"></i>
-								</div>
-							</div>
-							<img src="img/portfolio/submarine.png" class="img-responsive" alt="">
-						</a>
-					</div>
-				</div>
-			</div>
-		</section>
+    a {
+      color: #0088D9;
+      text-decoration: none;
+    }
 
-		<!-- About Section -->
-		<section class="success" id="about">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12 text-center">
-						<h2>About</h2>
-						<hr class="star-light">
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-lg-8 col-lg-offset-2 text-center">
-						<p> Based on simple design and performance,
-							so I have a job, is simplify everything,
-							connecting with everyone who has a passion on UI/UX.</p>
-					</div>
-					<div class="col-lg-8 col-lg-offset-2 text-center">
-						<a href="http://github.com/dphans/" class="btn btn-lg btn-outline">
-							<i class="fa fa-download"></i> Fork me on Github
-						</a>
-					</div>
-				</div>
-			</div>
-		</section>
+  </style>
 
-		<!-- Contact Section -->
-		<section id="contact">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12 text-center">
-						<h2>Contact Me</h2>
-						<hr class="star-primary">
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-lg-8 col-lg-offset-2">
-						<!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
-						<!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-						<form name="sentMessage" id="contactForm" novalidate>
-							<div class="row control-group">
-								<div class="form-group col-xs-12 floating-label-form-group controls">
-									<label>Name</label>
-									<input type="text" class="form-control" placeholder="Name" id="name" required data-validation-required-message="Please enter your name.">
-									<p class="help-block text-danger"></p>
-								</div>
-							</div>
-							<div class="row control-group">
-								<div class="form-group col-xs-12 floating-label-form-group controls">
-									<label>Email Address</label>
-									<input type="email" class="form-control" placeholder="Email Address" id="email" required data-validation-required-message="Please enter your email address.">
-									<p class="help-block text-danger"></p>
-								</div>
-							</div>
-							<div class="row control-group">
-								<div class="form-group col-xs-12 floating-label-form-group controls">
-									<label>Phone Number</label>
-									<input type="tel" class="form-control" placeholder="Phone Number" id="phone" required data-validation-required-message="Please enter your phone number.">
-									<p class="help-block text-danger"></p>
-								</div>
-							</div>
-							<div class="row control-group">
-								<div class="form-group col-xs-12 floating-label-form-group controls">
-									<label>Message</label>
-									<textarea rows="5" class="form-control" placeholder="Message" id="message" required data-validation-required-message="Please enter a message."></textarea>
-									<p class="help-block text-danger"></p>
-								</div>
-							</div>
-							<br>
-							<div id="success"></div>
-							<div class="row">
-								<div class="form-group col-xs-12">
-									<button type="submit" class="btn btn-success btn-lg">Send</button>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</section>
+  <style media='print'>
+    body {
+      background-color: #FFFFFF;
+      font-size: 16px;
+      padding: 20px;
+    }
 
-		<!-- Footer -->
-		<footer class="text-center">
-			<div class="footer-above">
-				<div class="container">
-					<div class="row">
-						<div class="footer-col col-md-4">
-							<h3>Location</h3>
-							<p>3481 Melrose Place<br>Beverly Hills, CA 90210</p>
-						</div>
-						<div class="footer-col col-md-4">
-							<h3>Around the Web</h3>
-							<ul class="list-inline">
-								<li>
-									<a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a>
-								</li>
-								<li>
-									<a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-google-plus"></i></a>
-								</li>
-								<li>
-									<a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a>
-								</li>
-								<li>
-									<a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-linkedin"></i></a>
-								</li>
-								<li>
-									<a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-dribbble"></i></a>
-								</li>
-							</ul>
-						</div>
-						<div class="footer-col col-md-4">
-							<h3>About Freelancer</h3>
-							<p>Freelance is a free to use, open source Bootstrap theme created by <a href="http://startbootstrap.com">Start Bootstrap</a>.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="footer-below">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-12">
-							Copyright &copy; Your Website 2014
-						</div>
-					</div>
-				</div>
-			</div>
-		</footer>
+    h1 {
+      font-size: 28px;
+      margin-bottom: 1em;
+    }
 
-		<!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
-		<div class="scroll-top page-scroll visible-xs visible-sm">
-			<a class="btn btn-primary" href="#page-top">
-				<i class="fa fa-chevron-up"></i>
-			</a>
-		</div>
+    code {
+      font-size: 16px;
+      margin-bottom: 2em;
+      margin-left: 20px;
+    }
 
-		<!-- Portfolio Modals -->
-		<div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-content">
-				<div class="close-modal" data-dismiss="modal">
-					<div class="lr">
-						<div class="rl">
-						</div>
-					</div>
-				</div>
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-8 col-lg-offset-2">
-							<div class="modal-body">
-								<h2>Project Title</h2>
-								<hr class="star-primary">
-								<img src="img/portfolio/cabin.png" class="img-responsive img-centered" alt="">
-								<p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-								<ul class="list-inline item-details">
-									<li>Client:
-										<strong><a href="http://startbootstrap.com">Start Bootstrap</a>
-										</strong>
-									</li>
-									<li>Date:
-										<strong><a href="http://startbootstrap.com">April 2014</a>
-										</strong>
-									</li>
-									<li>Service:
-										<strong><a href="http://startbootstrap.com">Web Development</a>
-										</strong>
-									</li>
-								</ul>
-								<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-content">
-				<div class="close-modal" data-dismiss="modal">
-					<div class="lr">
-						<div class="rl">
-						</div>
-					</div>
-				</div>
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-8 col-lg-offset-2">
-							<div class="modal-body">
-								<h2>Project Title</h2>
-								<hr class="star-primary">
-								<img src="img/portfolio/cake.png" class="img-responsive img-centered" alt="">
-								<p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-								<ul class="list-inline item-details">
-									<li>Client:
-										<strong><a href="http://startbootstrap.com">Start Bootstrap</a>
-										</strong>
-									</li>
-									<li>Date:
-										<strong><a href="http://startbootstrap.com">April 2014</a>
-										</strong>
-									</li>
-									<li>Service:
-										<strong><a href="http://startbootstrap.com">Web Development</a>
-										</strong>
-									</li>
-								</ul>
-								<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-content">
-				<div class="close-modal" data-dismiss="modal">
-					<div class="lr">
-						<div class="rl">
-						</div>
-					</div>
-				</div>
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-8 col-lg-offset-2">
-							<div class="modal-body">
-								<h2>Project Title</h2>
-								<hr class="star-primary">
-								<img src="img/portfolio/circus.png" class="img-responsive img-centered" alt="">
-								<p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-								<ul class="list-inline item-details">
-									<li>Client:
-										<strong><a href="http://startbootstrap.com">Start Bootstrap</a>
-										</strong>
-									</li>
-									<li>Date:
-										<strong><a href="http://startbootstrap.com">April 2014</a>
-										</strong>
-									</li>
-									<li>Service:
-										<strong><a href="http://startbootstrap.com">Web Development</a>
-										</strong>
-									</li>
-								</ul>
-								<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-content">
-				<div class="close-modal" data-dismiss="modal">
-					<div class="lr">
-						<div class="rl">
-						</div>
-					</div>
-				</div>
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-8 col-lg-offset-2">
-							<div class="modal-body">
-								<h2>Project Title</h2>
-								<hr class="star-primary">
-								<img src="img/portfolio/game.png" class="img-responsive img-centered" alt="">
-								<p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-								<ul class="list-inline item-details">
-									<li>Client:
-										<strong><a href="http://startbootstrap.com">Start Bootstrap</a>
-										</strong>
-									</li>
-									<li>Date:
-										<strong><a href="http://startbootstrap.com">April 2014</a>
-										</strong>
-									</li>
-									<li>Service:
-										<strong><a href="http://startbootstrap.com">Web Development</a>
-										</strong>
-									</li>
-								</ul>
-								<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-content">
-				<div class="close-modal" data-dismiss="modal">
-					<div class="lr">
-						<div class="rl">
-						</div>
-					</div>
-				</div>
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-8 col-lg-offset-2">
-							<div class="modal-body">
-								<h2>Project Title</h2>
-								<hr class="star-primary">
-								<img src="img/portfolio/safe.png" class="img-responsive img-centered" alt="">
-								<p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-								<ul class="list-inline item-details">
-									<li>Client:
-										<strong><a href="http://startbootstrap.com">Start Bootstrap</a>
-										</strong>
-									</li>
-									<li>Date:
-										<strong><a href="http://startbootstrap.com">April 2014</a>
-										</strong>
-									</li>
-									<li>Service:
-										<strong><a href="http://startbootstrap.com">Web Development</a>
-										</strong>
-									</li>
-								</ul>
-								<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-content">
-				<div class="close-modal" data-dismiss="modal">
-					<div class="lr">
-						<div class="rl">
-						</div>
-					</div>
-				</div>
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-8 col-lg-offset-2">
-							<div class="modal-body">
-								<h2>Project Title</h2>
-								<hr class="star-primary">
-								<img src="img/portfolio/submarine.png" class="img-responsive img-centered" alt="">
-								<p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-								<ul class="list-inline item-details">
-									<li>Client:
-										<strong><a href="http://startbootstrap.com">Start Bootstrap</a>
-										</strong>
-									</li>
-									<li>Date:
-										<strong><a href="http://startbootstrap.com">April 2014</a>
-										</strong>
-									</li>
-									<li>Service:
-										<strong><a href="http://startbootstrap.com">Web Development</a>
-										</strong>
-									</li>
-								</ul>
-								<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+    footer {
+      font-size: 10px;
+      margin-top: 40px;
+    }
+  </style>
 
-		<!-- jQuery -->
-		<script src="js/jquery.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+</head>
 
-		<!-- Bootstrap Core JavaScript -->
-		<script src="js/bootstrap.min.js"></script>
+<body>
+  <a href="https://github.com/dphans"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
+  <h1>Implementing <strong>TURN</strong> server on <strong>CentOS</strong></h1>
 
-		<!-- Plugin JavaScript -->
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-		<script src="js/classie.js"></script>
-		<script src="js/cbpAnimatedHeader.js"></script>
+  <div class="intro">
+    <div>
+      <code class="hero">p<span class="func">2</span>P</code>
+    </div>
 
-		<!-- Contact Form JavaScript -->
-		<script src="js/jqBootstrapValidation.js"></script>
-		<script src="js/contact_me.js"></script>
+    <div>
+      <span class="func">TURN</span> is an extension of <strong>STUN</strong>, so <span class="func">TURN</span> server has also <strong>STUN</strong> features.
+    </div>
 
-		<!-- Custom Theme JavaScript -->
-		<script src="js/freelancer.js"></script>
+    <div>
+      When we use both <strong>STUN</strong> and <span class="func">TURN</span> servers, <strong>STUN</strong> is always attempted first.
+    </div>
+    <div>
+    	<strong>STUN</strong> speedup the connection out of getting immediate candidates when users are sitting behind same NAT.
+    </div>
+    <div>
+      And <span class="func">TURN</span> is used as fallback option depending on client locations and network topologies.
+    </div>
 
-	</body>
+    <div>
 
-	</html>
+    </div>
+  </div>
+
+  <!--  Defining a function -->
+  <div>
+    <h2>Install <strong>Prerequisite</strong> for CentOS:</h2>
+    <code>
+    	<div>
+    		yum <span class="func">install</span> -y make gcc cc gcc-c++ wget
+    	</div>
+    	<div>
+    		yum <span class="func">install</span> -y openssl-devel libevent libevent-devel mysql-devel mysql-server
+    	</div>
+    </code>
+  </div>
+
+  <!--  Calling a function -->
+  <div>
+    <h2>Install <strong>LibEvent</strong> modules:</h2>
+    <div>
+    	As root, build and install the library with the usual:
+    </div>
+    <code>
+      <div>
+        wget <span class="classes">https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz</span>
+      </div>
+      <div>
+      	tar xvfz <span class="classes">libevent-2.0.21-stable.tar.gz</span>
+      </div>
+      <div>
+      	cd <span class="classes">libevent-2.0.21-stable</span> && ./configure
+      </div>
+      <div>
+      	make && make <span class="func">install</span> && cd ..
+      </div>
+    </code>
+  </div>
+
+  <!--  Function Types -->
+  <div>
+    <h2>Download & Install <strong>TURN</strong> modules:</h2>
+    <code>
+	    <div>
+	    	wget <span class="classes">http://turnserver.open-sys.org/downloads/v3.2.4.1/turnserver-3.2.4.1.tar.gz</span>
+	    </div>
+	    <div>
+	    	tar -xvzf <span class="classes">turnserver-3.2.4.1.tar.gz</span>
+	    </div>
+	    <div>
+	    	cd turnserver-3.2.4.1
+	    </div>
+	    <div>
+	    	make && make <span class="func">install</span>
+	    </div>
+    </code>
+    </div>
+  </div>
+
+  <!--  Passing and returning functions -->
+  <div>
+    <h2>Configure <strong>"turnserver.conf"</strong> file:</h2>
+      <code>
+        <div>
+        	cd /etc
+        </div>
+        <div>
+        	mkdir turnserver && cd turnserver
+        </div>
+        <div>
+        	vi turnserver.conf
+        </div>
+    </code>
+
+    <div>
+    	Paste into your editor there lines below:
+    </div>
+    <code>
+    	<div>
+    		<span class="name"># Replace username & password to your! Eg. user=baophan94:123456</span>
+    	</div>
+    	<div>
+    		user=username:password
+    	</div>
+    	<br />
+    	<div>
+    		<span class="name"># Replace port & your public ip</span>
+    	</div>
+    	<div>
+    		listening-port=2222
+    	</div>
+    	<div>
+    		listening-ip=127.1.1
+    	</div>
+    </code>
+    Press Esc and :wq to save config file.
+  </div>
+
+  <!--  Variadic functions -->
+  <div>
+    <h2><strong>"Permanently"</strong> run <strong>TURN</strong> server instance</h2>
+    <code>
+      <div>
+      	cd <span class="name">/etc/turnserver/</span>
+      </div>
+      <div>
+      	nohup turnserver -v -r <strong>ip:port</strong> -a -b turnuserdb.conf -c turnserver.conf -u <span class="classes">turn-username</span> -r <strong>ip:port</strong> -p <span class="classes">turn-password</span> &
+      </div>
+    </code>
+    <div>
+    	Replace "<strong>ip:port</strong>" with yours! E.g. 127.1.1:2222, "<span class="classes">turn-username</span>" with custom-username, and "<span class="classes">turn-password</span>" with custom-password.
+    </div>
+    <h3>Example:</h3>
+    <code>
+    	nohup turnserver -v -r 127.1.1:2222 -a -b turnuserdb.conf -c turnserver.conf -u baophan -r 127.1.1:2222 -p blablabla &
+    </code>
+  </div>
+
+  <div>
+  	<strong>Explain</strong>: You can run <strong>TURN</strong> server "<span class="classes">forever</span>", need placed turnserver command between "<strong>nohup</strong>" and "&", like this:
+  </div>
+  <code>
+  	<strong>nohup</strong> TURN-execution-command <strong>&</strong>
+  </code>
+
+  <hr/>
+
+  <div class='disclaimer'>
+    Question about create STUN/TURN server for WebRTC? Please contact: <strong>baophan94@icloud.com</strong> or <span class="name">http://dinophan.com/</span>
+  </div>
+
+  <footer>by <a href="http://github.com/dphans">@baophan94</a>.</footer>
+
+</body>
+</html>
