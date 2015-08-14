@@ -28,69 +28,51 @@
       </header>
       <section>
         <p><strong>TURN is an extension of STUN, so TURN server has also STUN features. When we use both STUN and TURN servers, STUN is always attempted first to speedup the connection out of getting immediate candidates when users are sitting behind same NAT. And TURN is used as fallback option depending on client locations and network topologies.</strong></p>
-
-<h3>
-<a id="first-install-prerequisite-for-centos" class="anchor" href="#first-install-prerequisite-for-centos" aria-hidden="true"><span class="octicon octicon-link"></span></a>First: Install Prerequisite for CentOS</h3>
-
-<div class="highlight highlight-sh"><pre>yum install -y make gcc cc gcc-c++ wget
-yum install -y openssl-devel libevent libevent-devel mysql-devel mysql-server</pre></div>
-
-<h3>
-<a id="second-install-libevent-modules" class="anchor" href="#second-install-libevent-modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Second: Install LibEvent modules</h3>
-
+<h3><a id="First_Install_Prerequisite_for_CentOS_2"></a>First: Install Prerequisite for CentOS</h3>
+<pre><code class="language-sh">yum install -y make gcc cc gcc-c++ wget
+yum install -y openssl-devel libevent libevent-devel mysql-devel mysql-server
+</code></pre>
+<h3><a id="Second_Install_LibEvent_modules_9"></a>Second: Install LibEvent modules</h3>
 <p>As root, build and install the library with the usual:</p>
-
-<div class="highlight highlight-sh"><pre>wget https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz
-tar xvfz libevent-2.0.21-stable.tar.gz
-<span class="pl-c1">cd</span> libevent-2.0.21-stable <span class="pl-k">&amp;&amp;</span> ./configure
-make <span class="pl-k">&amp;&amp;</span> make install <span class="pl-k">&amp;&amp;</span> <span class="pl-c1">cd</span> ..</pre></div>
-
-<h3>
-<a id="third-download--install-turn-modules" class="anchor" href="#third-download--install-turn-modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Third: Download &amp; Install TURN modules</h3>
-
-<div class="highlight highlight-sh"><pre>wget http://turnserver.open-sys.org/downloads/v3.2.4.1/turnserver-3.2.4.1.tar.gz
-tar -xvzf turnserver-3.2.4.1.tar.gz
-<span class="pl-c1">cd</span> turnserver-3.2.4.1
-make <span class="pl-k">&amp;&amp;</span> make install</pre></div>
-
-<h3>
-<a id="fourth-configure-turnserverconf-file" class="anchor" href="#fourth-configure-turnserverconf-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fourth: Configure “turnserver.conf” file</h3>
-
-<div class="highlight highlight-sh"><pre><span class="pl-c1">cd</span> /etc
-mkdir turnserver <span class="pl-k">&amp;&amp;</span> <span class="pl-c1">cd</span> turnserver
-vi turnserver.conf</pre></div>
-
+<pre><code class="language-sh">wget https://github.com/downloads/libevent/libevent/libevent-<span class="hljs-number">2.0</span>.<span class="hljs-number">21</span>-stable.tar.gz
+tar xvfz libevent-<span class="hljs-number">2.0</span>.<span class="hljs-number">21</span>-stable.tar.gz
+<span class="hljs-built_in">cd</span> libevent-<span class="hljs-number">2.0</span>.<span class="hljs-number">21</span>-stable &amp;&amp; ./configure
+make &amp;&amp; make install &amp;&amp; <span class="hljs-built_in">cd</span> ..
+</code></pre>
+<h3><a id="Third_Download__Install_TURN_modules_21"></a>Third: Download &amp; Install TURN modules</h3>
+<pre><code class="language-sh">wget http://turnserver.open-sys.org/downloads/v3.<span class="hljs-number">2.4</span>.<span class="hljs-number">1</span>/turnserver-<span class="hljs-number">3.2</span>.<span class="hljs-number">4.1</span>.tar.gz
+tar -xvzf turnserver-<span class="hljs-number">3.2</span>.<span class="hljs-number">4.1</span>.tar.gz
+<span class="hljs-built_in">cd</span> turnserver-<span class="hljs-number">3.2</span>.<span class="hljs-number">4.1</span>
+make &amp;&amp; make install
+</code></pre>
+<h3><a id="Fourth_Configure_turnserverconf_file_31"></a>Fourth: Configure “turnserver.conf” file</h3>
+<pre><code class="language-sh"><span class="hljs-built_in">cd</span> /etc
+mkdir turnserver &amp;&amp; <span class="hljs-built_in">cd</span> turnserver
+vi turnserver.conf
+</code></pre>
 <p>Paste into your editor there lines below:</p>
-
-<div class="highlight highlight-sh"><pre>user=username:password
-listening-port=2222
-listening-ip=127.1.1</pre></div>
-
+<pre><code class="language-sh">user=username:password
+listening-port=<span class="hljs-number">2222</span>
+listening-ip=<span class="hljs-number">127.1</span>.<span class="hljs-number">1</span>
+</code></pre>
 <p>Press Esc and :wq to save config file.</p>
-
-<h3>
-<a id="sixth-step-permanently-run-turn-server-instance" class="anchor" href="#sixth-step-permanently-run-turn-server-instance" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sixth Step: “Permanently” run TURN server instance</h3>
-
-<div class="highlight highlight-sh"><pre><span class="pl-c1">cd</span> /etc/turnserver/
-nohup turnserver -v -r ip:port -a -b turnuserdb.conf -c turnserver.conf -u turn-username -r ip:port -p turn-password <span class="pl-k">&amp;</span>
-<span class="pl-c"># Replace “ip:port” with yours! E.g. 127.1.1:2222, “turn-username” with custom-username, and “turn-password” with custom-password.</span></pre></div>
-
-<h4>
-<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example:</h4>
-
-<div class="highlight highlight-sh"><pre>nohup turnserver -v -r 127.1.1:2222 -a -b turnuserdb.conf -c turnserver.conf -u baophan -r 127.1.1:2222 -p blablabla <span class="pl-k">&amp;</span></pre></div>
-
+<h3><a id="Sixth_Step_Permanently_run_TURN_server_instance_49"></a>Sixth Step: “Permanently” run TURN server instance</h3>
+<pre><code class="language-sh"><span class="hljs-built_in">cd</span> /etc/turnserver/
+nohup turnserver -v -r ip:port <span class="hljs-operator">-a</span> -b turnuserdb.conf -c turnserver.conf -u turn-username -r ip:port -p turn-password &amp;
+<span class="hljs-comment"># Replace “ip:port” with yours! E.g. 127.1.1:2222, “turn-username” with custom-username, and “turn-password” with custom-password.</span>
+</code></pre>
+<h4><a id="Example_57"></a>Example:</h4>
+<pre><code class="language-sh">nohup turnserver -v -r <span class="hljs-number">127.1</span>.<span class="hljs-number">1</span>:<span class="hljs-number">2222</span> <span class="hljs-operator">-a</span> -b turnuserdb.conf -c turnserver.conf -u baophan -r <span class="hljs-number">127.1</span>.<span class="hljs-number">1</span>:<span class="hljs-number">2222</span> -p blablabla &amp;
+</code></pre>
 <p><strong>Explain: You can run TURN server “forever”, need placed turnserver command between “nohup” and “&amp;”, like this:</strong></p>
-
-<div class="highlight highlight-sh"><pre>nohup TURN-execution-command <span class="pl-k">&amp;</span></pre></div>
-
+<pre><code class="language-sh">nohup TURN-execution-command &amp;
+</code></pre>
 <p><strong>In javascript (Embedding a visible password in your Javascript code may allow someone else to use your TURN server):</strong></p>
-
-<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> pc_config <span class="pl-k">=</span> {<span class="pl-s"><span class="pl-pds">"</span>iceServers<span class="pl-pds">"</span></span><span class="pl-k">:</span> [{<span class="pl-s"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>stun:stun.l.google.com:19302<span class="pl-pds">"</span></span>},{<span class="pl-s"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span><span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>turn:my_username@&lt;turn_server_ip_address&gt;<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>credential<span class="pl-pds">"</span></span><span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>my_password<span class="pl-pds">"</span></span>}]};</pre></div>
-
+<pre><code class="language-javascript"><span class="hljs-keyword">var</span> pc_config = {<span class="hljs-string">"iceServers"</span>: [{<span class="hljs-string">"url"</span>: <span class="hljs-string">"stun:stun.l.google.com:19302"</span>},{<span class="hljs-string">"url"</span>:<span class="hljs-string">"turn:my_username@&lt;turn_server_ip_address&gt;"</span>, <span class="hljs-string">"credential"</span>:<span class="hljs-string">"my_password"</span>}]};
+</code></pre>
 <p><strong>Example on Android:</strong></p>
-
-<div class="highlight highlight-java"><pre>iceServers<span class="pl-k">.</span>add(<span class="pl-k">new</span> <span class="pl-smi">PeerConnection</span>.<span class="pl-smi">IceServer</span>(<span class="pl-s"><span class="pl-pds">"</span>turn:turn_server_ip_address<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>myusername<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>my password<span class="pl-pds">"</span></span>));</pre></div>
+<pre><code class="language-java">iceServers.add(<span class="hljs-keyword">new</span> PeerConnection.IceServer(<span class="hljs-string">"turn:turn_server_ip_address"</span>, <span class="hljs-string">"myusername"</span>, <span class="hljs-string">"my password"</span>));
+</code></pre>
       </section>
       <footer>
         <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
