@@ -10,7 +10,11 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="A Material Design theme for MkDocs">
       
+      
+      
+        <meta name="author" content="@dphans">
       
       
         <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -42,6 +46,12 @@
     
       <link rel="stylesheet" href="/assets/stylesheets/application.30686662.css">
       
+        <link rel="stylesheet" href="/assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#2196f3">
       
     
     
@@ -50,12 +60,14 @@
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
-        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Vietnamese:300,400,400i,700|IBM+Plex+Mono&display=fallback">
+        <style>body,input{font-family:"Google Vietnamese","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"IBM Plex Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="/assets/fonts/material-icons.css">
     
+    
+      <link rel="stylesheet" href="/assets/styles/fonts.css">
     
     
       
@@ -63,7 +75,9 @@
     
   </head>
   
-    <body dir="ltr">
+    
+    
+    <body dir="ltr" data-md-color-primary="blue" data-md-color-accent="orange">
   
     <svg class="md-svg">
       <defs>
@@ -80,9 +94,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="/." title="@dphans" class="md-header-nav__button md-logo">
+        <a href="https://dphans.github.io/" title="@dphans" class="md-header-nav__button md-logo">
           
-            <i class="md-icon"></i>
+            <i class="md-icon">devices</i>
           
         </a>
       </div>
@@ -150,9 +164,9 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="/." title="@dphans" class="md-nav__button md-logo">
+    <a href="https://dphans.github.io/" title="@dphans" class="md-nav__button md-logo">
       
-        <i class="md-icon"></i>
+        <i class="md-icon">devices</i>
       
     </a>
     @dphans
@@ -166,9 +180,105 @@
 
 
   <li class="md-nav__item">
-    <a href="/." title="Welcome to MkDocs" class="md-nav__link">
-      Welcome to MkDocs
+    <a href="/." title="Home" class="md-nav__link">
+      Home
     </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="/profile/" title="Profile" class="md-nav__link">
+      Profile
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Policies
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Policies
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="/policies/pocket_cantonese/" title="Pocket Cantonese" class="md-nav__link">
+      Pocket Cantonese
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="/policies/pocket_cantonese_vi/" title="Pocket Cantonese (Tiếng Việt)" class="md-nav__link">
+      Pocket Cantonese (Tiếng Việt)
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      2015
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        2015
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="/2015/webrtc_custom_stun_turn/" title="Implementing TURN server on CentOS" class="md-nav__link">
+      Implementing TURN server on CentOS
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
     
@@ -202,6 +312,10 @@
     <div class="md-footer-meta__inner md-grid">
       <div class="md-footer-copyright">
         
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2019 @dphans
+          </div>
+        
         powered by
         <a href="https://www.mkdocs.org">MkDocs</a>
         and
@@ -209,6 +323,15 @@
           Material for MkDocs</a>
       </div>
       
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="/assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/dphans/" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://www.linkedin.com/in/dphans/" class="md-footer-social__link fa fa-linkedin"></a>
+    
+  </div>
+
     </div>
   </div>
 </footer>
