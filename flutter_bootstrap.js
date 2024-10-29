@@ -8,9 +8,22 @@ if (!window._flutter) {
 }
 _flutter.buildConfig = {"engineRevision":"36335019a8eab588c3c2ea783c618d90505be233","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}]};
 
+const loadingDiv = document.createElement('div');
+loadingDiv.className = "loading";
+document.body.appendChild(loadingDiv);
+const loaderDiv = document.createElement('div');
+loaderDiv.className = "loader";
+loadingDiv.appendChild(loaderDiv);
 
+// Customize the app initialization process
 _flutter.loader.load({
-  serviceWorkerSettings: {
-    serviceWorkerVersion: "4183742858"
-  }
+    onEntrypointLoaded: async function (engineInitializer) {
+        const appRunner = await engineInitializer.initializeEngine();
+
+        // Remove the loading spinner when the app runner is ready
+        if (document.body.contains(loadingDiv)) {
+            document.body.removeChild(loadingDiv);
+        }
+        await appRunner.runApp();
+    }
 });
