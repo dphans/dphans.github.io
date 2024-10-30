@@ -69,6 +69,12 @@
     </style>
 </head>
 <body>
+<script>
+    const regExp = new RegExp("bot|google|baidu|bing|msn|teoma|slurp|yandex", "i");
+    if (regExp.test(navigator.userAgent)) {
+        window.flutterWebRenderer = "html";
+    }
+</script>
 <!--suppress HtmlUnknownTarget -->
 <script async src="flutter_bootstrap.js"></script>
 </body>
